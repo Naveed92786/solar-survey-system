@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Solar Survey System</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <style>
+        .quotation-status {
+            font-size: 0.85rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .quotation-yes {
+            background: #d4edda;
+            color: #155724;
+        }
+        .quotation-no {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="fas fa-tachometer-alt"></i> PES Admin Dashboard
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container-fluid py-4">
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <h6 class="card-title">Total Surveys</h6>
+                        <h2 id="totalSurveys">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <h6 class="card-title">On-Grid Systems</h6>
+                        <h2 id="onGridCount">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card bg-warning text-white">
+                    <div class="card-body">
+                        <h6 class="card-title">Quotations Saved</h6>
+                        <h2 id="quotationsSaved">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body">
+                        <h6 class="card-title">Total System Size (kW)</h6>
+                        <h2 id="totalSystemSize">0</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Search & Filter Surveys</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-2">
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search by name, CNIC, or Survey ID...">
+                    </div>
+                    <div class="col-md-2">
+                        <select class="form-select" id="filterSystemType">
+                            <option value="">All System Types</option>
+                            <option value="On-Grid">On-Grid</option>
+                            <option value="Hybrid">Hybrid</option>
+                            <option value="Off-Grid">Off-Grid</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select class="form-select" id="filterCity">
+                            <option value="">All Cities</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select class="form-select" id="filterQuotation">
+                            <option value="">All Quotations</option>
+                            <option value="yes">With Quotation</option>
+                            <option value="no">Without Quotation</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary" id="exportExcelBtn">
+                            <i class="fas fa-file-excel"></i> Export Excel
+                        </button>
+                    </div>
+                    <div class="col-md-1">
+                        <button class="btn btn-danger" id="refreshBtn">
+                            <i class="fas fa-sync"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Surveys Table -->
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">All Surveys with Quotations</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="surveysTable">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Survey ID</th>
+                                <th>Customer Name</th>
+                                <th>Mobile</th>
+                                <th>CNIC</th>
+                                <th>City</th>
+                                <th>System Type</th>
+                                <th>System Size (kW)</th>
+                                <th>Date</th>
+                                <th>Quotation Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="surveysTableBody">
+                            <tr><td colspan="10" class="text-center text-muted">No surveys found</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Survey Details -->
+    <div class="modal fade" id="surveyDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Survey Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="surveyDetailsContent">
+                    <!-- Details will be loaded here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info" id="quotationBtn">Generate Quotation</button>
+                    <button type="button" class="btn btn-primary" id="editSurveyBtn">Edit</button>
+                    <button type="button" class="btn btn-danger" id="deleteSurveyBtn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2024 Perfect Energy Solutions (PES). All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
