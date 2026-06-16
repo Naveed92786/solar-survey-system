@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Site Survey - Perfect Energy Solutions</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="fas fa-sun"></i> Perfect Energy Solutions (PES)
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <button class="btn btn-sm btn-light ms-2" id="darkModeToggle">
+                            <i class="fas fa-moon"></i> Dark Mode
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html" target="_blank"><i class="fas fa-chart-line"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="printSurvey()"><i class="fas fa-print"></i> Print</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container-fluid py-4">
+        <!-- Form Progress -->
+        <div class="progress mb-4" style="height: 25px;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" id="formProgress" role="progressbar" style="width: 0%">0%</div>
+        </div>
+
+        <!-- Tabs for Form and Preview -->
+        <ul class="nav nav-tabs mb-3" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="form-tab" data-bs-toggle="tab" data-bs-target="#form-content" type="button" role="tab">
+                    <i class="fas fa-edit"></i> Survey Form
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="preview-tab" data-bs-toggle="tab" data-bs-target="#preview-content" type="button" role="tab">
+                    <i class="fas fa-eye"></i> Preview & MQ Global Link
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <!-- Form Tab -->
+            <div class="tab-pane fade show active" id="form-content" role="tabpanel">
+                <!-- Main Form -->
+                <form id="surveyForm" class="needs-validation" novalidate>
+                    <!-- Section 1: Survey Information -->
+                    <div class="card mb-3 animate-card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-info-circle"></i> Survey Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Survey ID <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="surveyId" readonly>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Survey Date <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="surveyDate" readonly>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Day <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="surveyDay" readonly>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Surveyor Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="surveyorName" required>
+                                <div class="invalid-feedback">Surveyor name is required</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Customer Information -->
+                    <div class="card mb-3 animate-card">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-user"></i> Customer Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Customer Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="customerName" required>
+                                    <div class="invalid-feedback">Customer name is required</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Mobile Number <span class="text-danger">*</span></label>
+                                    <input type="tel" class="form-control" id="mobileNumber" required>
+                                    <div class="invalid-feedback">Mobile number is required</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">WhatsApp Number</label>
+                                    <input type="tel" class="form-control" id="whatsappNumber">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">CNIC Number <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="cnicNumber" required>
+                                    <div class="invalid-feedback">CNIC number is required</div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="emailAddress">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Complete Address <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="completeAddress" rows="2" required></textarea>
+                                <div class="invalid-feedback">Address is required</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">City <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="city" required>
+                                    <div class="invalid-feedback">City is required</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <button type="button" class="btn btn-info btn-sm mt-4" id="getLocationBtn">
+                                        <i class="fas fa-map-marker-alt"></i> Get GPS Coordinates
+                                    </button>
+                                    <small id="gpsCoordinates" class="d-block mt-2"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Property Information -->
+                    <div class="card mb-3 animate-card">
+                        <div class="card-header bg-warning text-dark">
+                            <h5 class="mb-0"><i class="fas fa-home"></i> Property Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Property Type <span class="text-danger">*</span></label>
+                                <select class="form-select" id="propertyType" required>
+                                    <option value="">-- Select --</option>
+                                    <option value="Residential">Residential</option>
+                                    <option value="Commercial">Commercial</option>
+                                    <option value="Industrial">Industrial</option>
+                                    <option value="School">School</option>
+                                    <option value="Hospital">Hospital</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <div class="invalid-feedback">Property type is required</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Number of Floors <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="numberOfFloors" min="1" required>
+                                <div class="invalid-feedback">Number of floors is required</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Roof Type <span class="text-danger">*</span></label>
+                                <select class="form-select" id="roofType" required>
+                                    <option value="">-- Select --</option>
+                                    <option value="RCC">RCC</option>
+                                    <option value="Shed">Shed</option>
+                                    <option value="Tile">Tile</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <div class="invalid-feedback">Roof type is required</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Load Details -->
+                    <div class="card mb-3 animate-card">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0"><i class="fas fa-bolt"></i> Load Details</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted">Select all applicable appliances:</p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="ac" value="Air Conditioners">
+                                        <label class="form-check-label">Air Conditioners</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="fans" value="Fans">
+                                        <label class="form-check-label">Fans</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="lights" value="Lights">
+                                        <label class="form-check-label">Lights</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="refrigerator" value="Refrigerators">
+                                        <label class="form-check-label">Refrigerators</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="computers" value="Computers">
+                                        <label class="form-check-label">Computers</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="motors" value="Motors">
+                                        <label class="form-check-label">Motors</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="waterPumps" value="Water Pumps">
+                                        <label class="form-check-label">Water Pumps</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="other" value="Other Appliances">
+                                        <label class="form-check-label">Other Appliances</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <label class="form-label">Estimated Connected Load (kW) <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="connectedLoad" step="0.1" min="0" required>
+                                <div class="invalid-feedback">Connected load is required</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 5: Electricity Information -->
+                    <div class="card mb-3 animate-card">
+                        <div class="card-header bg-danger text-white">
+                            <h5 class="mb-0"><i class="fas fa-plug"></i> Electricity Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Electricity Provider <span class="text-danger">*</span></label>
+                                <select class="form-select" id="provider" required>
+                                    <option value="">-- Select --</option>
+                                    <option value="K-Electric">K-Electric</option>
+                                    <option value="LESCO">LESCO</option>
+                                    <option value="FESCO">FESCO</option>
+                                    <option value="GEPCO">GEPCO</option>
+                                    <option value="IESCO">IESCO</option>
+                                    <option value="MEPCO">MEPCO</option>
+                                    <option value="PESCO">PESCO</option>
+                                    <option value="HESCO">HESCO</option>
+                                    <option value="SEPCO">SEPCO</option>
+                                    <option value="QESCO">QESCO</option>
+                                    <option value="TESCO">TESCO</option>
+                                </select>
+                                <div class="invalid-feedback">Provider is required</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Meter Number <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="meterNumber" required>
+                                    <div class="invalid-feedback">Meter number is required</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Connection Type <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="connectionType" required>
+                                        <option value="">-- Select --</option>
+                                        <option value="Single Phase">Single Phase</option>
+                                        <option value="Three Phase">Three Phase</option>
+                                    </select>
+                                    <div class="invalid-feedback">Connection type is required</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Sanctioned Load (kW)</label>
+                                    <input type="number" class="form-control" id="sanctionedLoad" step="0.1">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Average Monthly Bill (Rs)</label>
+                                    <input type="number" class="form-control" id="monthlyBill" step="0.01">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 6: Solar Site Assessment -->
+                    <div class="card mb-3 animate-card">
+                        <div class="card-header bg-secondary text-white">
+                            <h5 class="mb-0"><i class="fas fa-sun"></i> Solar Site Assessment</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Total Roof Area (sq.ft) <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="totalRoofArea" step="0.1" required>
+                                    <div class="invalid-feedback">Total roof area is required</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Available Solar Area (sq.ft) <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="availableSolarArea" step="0.1" required>
+                                    <div class="invalid-feedback">Available solar area is required</div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Roof Direction <span class="text-danger">*</span></label>
+                                <select class="form-select" id="roofDirection" required>
+                                    <option value="">-- Select --</option>
+                                    <option value="North">North</option>
+                                    <option value="South">South</option>
+                                    <option value="East">East</option>
+                                    <option value="West">West</option>
+                                </select>
+                                <div class="invalid-feedback">Roof direction is required</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Shading Level <span class="text-danger">*</span></label>
+                                <select class="form-select" id="shadingLevel" required>
+                                    <option value="">-- Select --</option>
+                                    <option value="None">None</option>
+                                    <option value="Low">Low</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="High">High</option>
+                                </select>
+                                <div class="invalid-feedback">Shading level is required</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Shade Source (if applicable)</label>
+                                <select class="form-select" id="shadeSource">
+                                    <option value="">-- Select --</option>
+                                    <option value="Trees">Trees</option>
+                                    <option value="Buildings">Buildings</option>
+                                    <option value="Water Tank">Water Tank</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 7: Electrical Assessment -->
+                    <div class="card mb-3 animate-card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-cog"></i> Electrical Assessment</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Main Distribution Board Condition <span class="text-danger">*</span></label>
+                                <select class="form-select" id="mdbCondition" required>
+                                    <option value="">-- Select --</option>
+                                    <option value="Good">Good</option>
+                                    <option value="Average">Average</option>
+                                    <option value="Upgrade Required">Upgrade Required</option>
+                                </select>
+                                <div class="invalid-feedback">MDB condition is required</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Earthing Available <span class="text-danger">*</span></label>
+                                <select class="form-select" id="earthingAvailable" required>
+                                    <option value="">-- Select --</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                                <div class="invalid-feedback">Earthing status is required</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Wiring Condition <span class="text-danger">*</span></label>
+                                <select class="form-select" id="wiringCondition" required>
+                                    <option value="">-- Select --</option>
+                                    <option value="Good">Good</option>
+                                    <option value="Average">Average</option>
+                                    <option value="Replacement Required">Replacement Required</option>
+                                </select>
+                                <div class="invalid-feedback">Wiring condition is required</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 8: Solar Recommendation -->
+                    <div class="card mb-3 animate-card">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-lightbulb"></i> Solar Recommendation</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">System Type <span class="text-danger">*</span></label>
+                                <select class="form-select" id="systemType" required>
+                                    <option value="">-- Select --</option>
+                                    <option value="On-Grid">On-Grid</option>
+                                    <option value="Hybrid">Hybrid</option>
+                                    <option value="Off-Grid">Off-Grid</option>
+                                </select>
+                                <div class="invalid-feedback">System type is required</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Net Metering Required <span class="text-danger">*</span></label>
+                                <select class="form-select" id="netMeteringRequired" required>
+                                    <option value="">-- Select --</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                                <div class="invalid-feedback">Net metering status is required</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Recommended System Size (kW) <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="systemSize" step="0.1" min="0" required>
+                                <div class="invalid-feedback">System size is required</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 9: Photo Upload -->
+                    <div class="card mb-3 animate-card">
+                        <div class="card-header bg-warning text-dark">
+                            <h5 class="mb-0"><i class="fas fa-camera"></i> Photo Upload</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted">Upload photos for each section (Max 5 MB per file)</p>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Electricity Bill</label>
+                                    <input type="file" class="form-control" id="billPhoto" accept="image/*">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Meter Photo</label>
+                                    <input type="file" class="form-control" id="meterPhoto" accept="image/*">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Distribution Board</label>
+                                    <input type="file" class="form-control" id="dbPhoto" accept="image/*">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Roof Area</label>
+                                    <input type="file" class="form-control" id="roofPhoto" accept="image/*">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Site Location</label>
+                                    <input type="file" class="form-control" id="sitePhoto" accept="image/*">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Customer CNIC</label>
+                                    <input type="file" class="form-control" id="cnicPhoto" accept="image/*">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Additional Images</label>
+                                <input type="file" class="form-control" id="additionalPhotos" accept="image/*" multiple>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 10: Engineer Remarks -->
+                    <div class="card mb-3 animate-card">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0"><i class="fas fa-comment"></i> Engineer Remarks</h5>
+                        </div>
+                        <div class="card-body">
+                            <label class="form-label">Additional Remarks <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="engineerRemarks" rows="4" required placeholder="Enter any additional observations or recommendations..."></textarea>
+                            <div class="invalid-feedback">Remarks are required</div>
+                        </div>
+                    </div>
+
+                    <!-- Section 11: Digital Signatures -->
+                    <div class="card mb-3 animate-card">
+                        <div class="card-header bg-danger text-white">
+                            <h5 class="mb-0"><i class="fas fa-pen-fancy"></i> Digital Signatures</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label">Customer Signature <span class="text-danger">*</span></label>
+                                    <div id="customerSignature" class="border rounded p-3 bg-light" style="height: 150px; cursor: crosshair;"></div>
+                                    <button type="button" class="btn btn-sm btn-outline-primary mt-2" id="clearCustomerSig">Clear</button>
+                                    <input type="hidden" id="customerSignatureData">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Engineer Signature <span class="text-danger">*</span></label>
+                                    <div id="engineerSignature" class="border rounded p-3 bg-light" style="height: 150px; cursor: crosshair;"></div>
+                                    <button type="button" class="btn btn-sm btn-outline-primary mt-2" id="clearEngineerSig">Clear</button>
+                                    <input type="hidden" id="engineerSignatureData">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div class="card mb-5">
+                        <div class="card-body d-flex gap-2 flex-wrap">
+                            <button type="submit" class="btn btn-success btn-lg" id="submitBtn">
+                                <i class="fas fa-save"></i> Save Survey
+                            </button>
+                            <button type="button" class="btn btn-primary btn-lg" id="exportPdfBtn">
+                                <i class="fas fa-file-pdf"></i> Export PDF
+                            </button>
+                            <button type="button" class="btn btn-info btn-lg" id="printBtn">
+                                <i class="fas fa-print"></i> Print
+                            </button>
+                            <button type="button" class="btn btn-warning btn-lg" id="whatsappBtn">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </button>
+                            <button type="reset" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Preview Tab -->
+            <div class="tab-pane fade" id="preview-content" role="tabpanel">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-link"></i> MQ Global Quotation Link Preview</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info" role="alert">
+                            <i class="fas fa-lightbulb"></i> <strong>Info:</strong> Preview your survey data before generating a quotation from MQ Global
+                        </div>
+                        
+                        <div id="previewContent" class="mt-4">
+                            <!-- Preview will be loaded here -->
+                        </div>
+
+                        <div class="mt-4">
+                            <button class="btn btn-lg btn-primary" id="generateQuotationBtn">
+                                <i class="fas fa-external-link-alt"></i> Generate Quotation on MQ Global
+                            </button>
+                            <a href="https://quotation.mqglobal.co/" target="_blank" class="btn btn-lg btn-secondary ms-2">
+                                <i class="fas fa-globe"></i> Visit MQ Global Website
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <h6><i class="fas fa-phone"></i> Contact Us</h6>
+                    <p>
+                        <strong>Perfect Energy Solutions (PES)</strong><br>
+                        Phone: +92 339 0081716 | +92 336 7831347<br>
+                        Email: thepesolutions@outlook.com
+                    </p>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <h6><i class="fas fa-link"></i> MQ Global Partnership</h6>
+                    <p>
+                        Integrated with <a href="https://quotation.mqglobal.co/" target="_blank" class="text-warning">MQ Global Quotation System</a><br>
+                        For professional solar quotations and pricing
+                    </p>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p class="mb-0">&copy; 2024 Perfect Energy Solutions (PES). All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
